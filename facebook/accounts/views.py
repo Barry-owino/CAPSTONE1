@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -10,6 +10,7 @@ from .serializers import UserRegisterSerializer, UserLoginSerializer
 class UserRegisterView(generics.GenericAPIView):
     queryset = User.objects.all() # comeback an do more about this, when is it neede in this code and when not
     serializer_class = UserRegisterSerializer
+    permissions_classes = [permissions.AllowAny]
 
     def post(self, serializer): # need to know why its named post
         serializer = self.get_serializer(data=request.data)
@@ -26,6 +27,7 @@ class UserRegisterView(generics.GenericAPIView):
 
 class UserLoginView(generics.GenericAPIView):
     serializer_class  = UserLoginSerializer
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
