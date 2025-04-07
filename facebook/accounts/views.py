@@ -1,5 +1,7 @@
 from rest_framework import generics, status, permissions
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
+#from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .serializers import UserRegisterSerializer, UserLoginSerializer
@@ -10,10 +12,10 @@ from .serializers import UserRegisterSerializer, UserLoginSerializer
 class UserRegisterView(generics.GenericAPIView):
     queryset = User.objects.all() # comeback an do more about this, when is it neede in this code and when not
     serializer_class = UserRegisterSerializer
-    permissions_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def post(self, serializer): # need to know why its named post
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
@@ -30,7 +32,7 @@ class UserLoginView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
 
         username = serializer.validated_data['username']
@@ -41,7 +43,7 @@ class UserLoginView(generics.GenericAPIView):
             token, created =Token.objects.get_or_create(user=user)
             return Response({
                 'message': 'Login successfull',
-                'username': username.username,
+                'username': username,
                 'token': token.key
             }, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
