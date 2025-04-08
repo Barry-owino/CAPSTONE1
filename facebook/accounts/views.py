@@ -3,8 +3,11 @@ from django.contrib.auth import authenticate
 #from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+#from django.contrib.auth.models import User
 from .serializers import UserRegisterSerializer, UserLoginSerializer
+
+User = get_user_model()
 
 # Create your views here.
 
