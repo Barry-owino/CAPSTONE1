@@ -17,7 +17,7 @@ class UserRegisterView(generics.GenericAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = [permissions.AllowAny]
 
-    def post(self, serializer): # need to know why its named post
+    def post(self, request): # need to know why its named post
         serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -57,7 +57,7 @@ class UserUpdateView(generics.GenericAPIView):
     serializer_class = UserUpdateSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def patch(Self, request, pk):
+    def patch(self, request, pk):
         try:
             user = User.object.get(pk=pk)
         except User.DoesNotExist:
